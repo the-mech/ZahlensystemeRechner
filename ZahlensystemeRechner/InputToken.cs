@@ -4,22 +4,26 @@ using System.Text;
 
 namespace ZahlensystemeRechner
 {
+    public enum InputTokenType
+    {
+        Operator,
+        Operand
+    };
     public class InputToken
     {
-        public enum TokenType
-        {
-            Operator,
-            Operand
-        };
+        public InputTokenType Type { get; }
 
-        private TokenType Type { get; }
+        public string Token { get; }
 
-        private string Token { get; }
-
-        public InputToken(string token, TokenType type)
+        public InputToken(string token, InputTokenType type)
         {
             this.Token = token;
             Type = type;
+        }
+
+        public override string ToString()
+        {
+            return Token;
         }
     }
 }

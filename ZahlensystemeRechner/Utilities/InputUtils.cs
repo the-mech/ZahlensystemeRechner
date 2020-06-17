@@ -10,8 +10,10 @@ namespace ZahlensystemeRechner.Utilities
         //(2*-4)+2
         //( 2 * -4 ) + 2
         //-h_AFFEF
-        public static Operand ExtractOperandFromInput(string input)
+        public static Operand CreateOperandFromInputToken(InputToken token)
         {
+            string input = token.Token;
+
             bool isNegative = false;
 
             if (input[0] == '-')
@@ -34,7 +36,7 @@ namespace ZahlensystemeRechner.Utilities
 
                 if (prefix.Length > 1)
                 {
-                    throw new ArgumentException("Prefix <"+prefix+">ist ungültig.");
+                    throw new ArgumentException("Prefix <"+prefix+"> ist ungültig.");
                 }
                 else
                 {
@@ -61,6 +63,35 @@ namespace ZahlensystemeRechner.Utilities
             }
 
         }
+        public static Operator CreateOperatorFromInputToken(InputToken token)
+        {
+            if (token.Type == InputTokenType.Operand)
+            {
+                throw new ArgumentException("Expected Operator, got Operand");
+            }
+
+            switch (token.Token)
+            {
+
+                case "*":
+                    return new Operator(OperatorType.Multiply,OperatorPrecedence.High);
+                case "/":
+                    return new Operator(OperatorType.Divide, OperatorPrecedence.High);
+                case "+":
+                    return new Operator(OperatorType.Add, OperatorPrecedence.Low);
+                case "-":
+                    return new Operator(OperatorType.Subtract, OperatorPrecedence.Low);
+                case "(":
+                    return new Operator(OperatorType.OpeningBracket, OperatorPrecedence.Ignore);
+                case ")":
+                    return new Operator(OperatorType.ClosingBracket, OperatorPrecedence.Ignore);
+
+                default:
+                    throw new ArgumentException("Invalid Operator!");
+            }
+
+
+        }
 
         public static InputToken[] CreateTokensFromInput(string input)
         {
@@ -75,11 +106,12 @@ namespace ZahlensystemeRechner.Utilities
                 {
 
                     if (parsingNumber)
-                    { 
-                        token.Add(new InputToken(numberBuilder.ToString(), InputToken.TokenType.Operand));
+                    {
+                        AddOperandTokenToList(token, numberBuilder.ToString());
                         numberBuilder.Clear();
                         parsingNumber = false;
-                        token.Add(new InputToken(input[i].ToString(),InputToken.TokenType.Operator));
+
+                        AddOperatorTokenToList(token, input[i]);
                     }
                     else
                         if (input[i] == '-')
@@ -89,7 +121,7 @@ namespace ZahlensystemeRechner.Utilities
                         }
                     else
                     {
-                        token.Add(new InputToken(input[i].ToString(), InputToken.TokenType.Operator));
+                        AddOperatorTokenToList(token, input[i]);
                     }
 
 
@@ -105,11 +137,25 @@ namespace ZahlensystemeRechner.Utilities
             //am ende noch die letzte zahl zur liste hinzufügen
             if (parsingNumber)
             {
-                token.Add(new InputToken(numberBuilder.ToString(), InputToken.TokenType.Operand));
+                token.Add(new InputToken(numberBuilder.ToString(), InputTokenType.Operand));
                 numberBuilder.Clear();
             }
 
             return token.ToArray();
         }
+
+        public static void AddOperandTokenToList(List<InputToken> list, string operand)
+        {
+            list.Add(new InputToken(operand, InputTokenType.Operand));
+        }
+
+        public static void AddOperatorTokenToList(List<InputToken> list, char op)
+        {
+            InputTokenType type = InputTokenType.Operator;
+
+            list.Add(new InputToken(op.ToString(), type));
+        }
     }
+
+   
 }

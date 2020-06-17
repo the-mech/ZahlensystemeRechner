@@ -6,11 +6,11 @@ namespace ZahlensystemeRechner
 {
     public class Operand
     {
-        public long decimalValue {get; set;}
+        public long DecimalValue {get; set;}
         
         public Operand(long decimalValue)
         {
-            this.decimalValue = decimalValue;
+            this.DecimalValue = decimalValue;
         }
 
     }

@@ -27,7 +27,7 @@ namespace ZahlensystemeRechner
             }
             else
             {
-                throw new ArgumentException("Die binäre Eingabe" + input + "enthält ungültige Zeichen.");
+                throw new ArgumentException("Die binäre Eingabe " + input + " enthält ungültige Zeichen.");
             }
 
             if (isNegative)
@@ -53,7 +53,7 @@ namespace ZahlensystemeRechner
             }
             else
             {
-                throw new ArgumentException("Die dezimale Eingabe"+input+"enthält ungültige Zeichen.");
+                throw new ArgumentException("Die dezimale Eingabe "+input+" enthält ungültige Zeichen.");
             }
 
             if (isNegative)
@@ -102,7 +102,7 @@ namespace ZahlensystemeRechner
             }
             else
             {
-                throw new ArgumentException("Die hexadezimale Eingabe" + input + "enthält ungültige Zeichen.");
+                throw new ArgumentException("Die hexadezimale Eingabe " + input + " enthält ungültige Zeichen.");
             }
 
             if (isNegative)
@@ -128,7 +128,7 @@ namespace ZahlensystemeRechner
             }
             else
             {
-                throw new ArgumentException("Die oktale Eingabe" + input + "enthält ungültige Zeichen.");
+                throw new ArgumentException("Die oktale Eingabe " + input + " enthält ungültige Zeichen.");
             }
 
             if (isNegative)

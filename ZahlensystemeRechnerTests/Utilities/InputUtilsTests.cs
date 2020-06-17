@@ -11,11 +11,11 @@ namespace ZahlensystemeRechner.Utilities.Tests
     public class InputUtilsTests
     {
         [TestMethod()]
-        public void ExtractOperandFromInputTest()
+        public void CreateOperandFromInputTest()
         {
             string input = "b_101010";
-
-            Operand op = InputUtils.ExtractOperandFromInput(input);
+            InputToken tok = new InputToken(input, InputTokenType.Operand);
+            Operand op = InputUtils.CreateOperandFromInputToken(tok);
 
             Assert.AreEqual(42, op.decimalValue);
         }
@@ -24,8 +24,8 @@ namespace ZahlensystemeRechner.Utilities.Tests
         public void ExtractOperandFromNegativeInputTest()
         {
             string input = "-h_AFFE";
-
-            Operand op = InputUtils.ExtractOperandFromInput(input);
+            InputToken tok = new InputToken(input, InputTokenType.Operand);
+            Operand op = InputUtils.CreateOperandFromInputToken(tok);
 
             Assert.AreEqual(-45054, op.decimalValue);
         }
@@ -34,16 +34,16 @@ namespace ZahlensystemeRechner.Utilities.Tests
         public void ExtractOperandFromInvalidPrefixTest()
         {
             string input = "hh_AFFE";
-
-            Assert.ThrowsException<ArgumentException>(() => InputUtils.ExtractOperandFromInput(input));
+            InputToken tok = new InputToken(input, InputTokenType.Operand);
+            Assert.ThrowsException<ArgumentException>(() => InputUtils.CreateOperandFromInputToken(tok));
         }
 
         [TestMethod]
         public void ExtractOperandFromInvalidInput()
         {
             string input = "kekew";
-
-            Assert.ThrowsException<ArgumentException>(() => InputUtils.ExtractOperandFromInput(input));
+            InputToken tok = new InputToken(input, InputTokenType.Operand);
+            Assert.ThrowsException<ArgumentException>(() => InputUtils.CreateOperandFromInputToken(tok));
         }
 
 
@@ -51,18 +51,18 @@ namespace ZahlensystemeRechner.Utilities.Tests
         public void ExtractOperandFromDoublePrefixInput()
         {
             string input = "h_b_FFFW";
+            InputToken tok = new InputToken(input, InputTokenType.Operand);
 
-
-            Assert.ThrowsException<ArgumentException>(() => InputUtils.ExtractOperandFromInput(input));
+            Assert.ThrowsException<ArgumentException>(() => InputUtils.CreateOperandFromInputToken(tok));
         }
 
         [TestMethod]
         public void ExtractOperandFromInputOnlyMinusSign()
         {
             string input = "-";
+            InputToken tok = new InputToken(input, InputTokenType.Operand);
 
-
-            Assert.ThrowsException<ArgumentException>(() => InputUtils.ExtractOperandFromInput(input));
+            Assert.ThrowsException<ArgumentException>(() => InputUtils.CreateOperandFromInputToken(tok));
         }
 
         [TestMethod()]
@@ -70,9 +70,13 @@ namespace ZahlensystemeRechner.Utilities.Tests
         {
             string input = "2+4-4";
 
-            string[] result = InputUtils.CreateTokensFromInput(input);
-            Console.WriteLine(String.Join(' ', result));
-            CollectionAssert.AreEquivalent(new string[] { "2", "+", "4", "+", "-4" }, result);
+            InputToken[] result = InputUtils.CreateTokensFromInput(input);
+            CollectionAssert.AreEquivalent(new InputToken[] { 
+                new InputToken("2",InputTokenType.Operand), 
+                new InputToken("+", InputTokenType.Operator), 
+                new InputToken("4", InputTokenType.Operand), 
+                new InputToken("+", InputTokenType.Operator), 
+                new InputToken("-4", InputTokenType.Operand) }, result);
         }
 
         [TestMethod()]
@@ -80,9 +84,17 @@ namespace ZahlensystemeRechner.Utilities.Tests
         {
             string input = "-(d_2+o_4-h_Affe)";
 
-            string[] result = InputUtils.CreateTokensFromInput(input);
-            Console.WriteLine(String.Join(' ', result));
-            CollectionAssert.AreEquivalent(new string[] { "-1","*", "(","d_2","+", "o_4", "-", "h_Affe",")" }, result);
+            InputToken[] result = InputUtils.CreateTokensFromInput(input);
+            CollectionAssert.AreEquivalent(new InputToken[] {
+                new InputToken("-1",InputTokenType.Operand),
+                new InputToken("*", InputTokenType.Operator),
+                new InputToken("(", InputTokenType.Operator),
+                new InputToken("d_2", InputTokenType.Operand),
+                new InputToken("+", InputTokenType.Operator),
+                new InputToken("o_4", InputTokenType.Operand),
+                new InputToken("-", InputTokenType.Operator),
+                new InputToken("h_Affe", InputTokenType.Operand),
+                new InputToken(")", InputTokenType.Operator) }, result);
         }
     }
 }
