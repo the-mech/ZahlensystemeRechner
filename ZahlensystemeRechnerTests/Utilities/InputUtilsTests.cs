@@ -17,7 +17,7 @@ namespace ZahlensystemeRechner.Utilities.Tests
             InputToken tok = new InputToken(input, InputTokenType.Operand);
             Operand op = InputUtils.CreateOperandFromInputToken(tok);
 
-            Assert.AreEqual(42, op.decimalValue);
+            Assert.AreEqual(42, op.DecimalValue);
         }
 
         [TestMethod]
@@ -27,7 +27,7 @@ namespace ZahlensystemeRechner.Utilities.Tests
             InputToken tok = new InputToken(input, InputTokenType.Operand);
             Operand op = InputUtils.CreateOperandFromInputToken(tok);
 
-            Assert.AreEqual(-45054, op.decimalValue);
+            Assert.AreEqual(-45054, op.DecimalValue);
         }
 
         [TestMethod]

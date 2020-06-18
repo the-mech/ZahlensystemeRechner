@@ -119,5 +119,21 @@ namespace ZahlensystemeRechner.Utilities
             Array.Reverse(reversed);
             return new string(reversed);
         }
+
+        /// <summary>
+        /// Konvertiert den übergegenen Operanden ins binäre, oktale und hexadezimale Zahlensystem
+        /// und gibt anschließend diesen in den 4 Darstellungen aus ( Binär, Dezimal, Oktal, Hexadezimal)
+        /// </summary>
+        /// <param name="number"> Operand, der konvertiert und ausgegeben werden soll</param>
+        public static void ConvertNumber(Operand number)
+        {
+            ProtocolUtils.AddToProtocol("Bin: " + ConversionUtils.ConvertToBinary(number), ProtocolMessageType.Result);
+            ProtocolUtils.AddToProtocol("Dez: " + number.DecimalValue, ProtocolMessageType.Result);
+            ProtocolUtils.AddToProtocol("Okt: " + ConversionUtils.ConvertToOctal(number), ProtocolMessageType.Result);
+            ProtocolUtils.AddToProtocol("Hex: " + ConversionUtils.ConvertToHexadecimal(number), ProtocolMessageType.Result);
+        }
+
     }
+
+
 }
