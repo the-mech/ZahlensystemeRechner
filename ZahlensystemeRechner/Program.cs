@@ -8,6 +8,15 @@ namespace ZahlensystemeRechner
     {
         static void Main(string[] args)
         {
+            ProtocolUtils.AddToProtocol("Herzlich Willkommen bei dem Zahlensysteme-Rechner!", ProtocolMessageType.Info);
+            ProtocolUtils.AddToProtocol("Um ihre Berechnung zu starten geben sie bitte einen Term ein.", ProtocolMessageType.Info);
+            ProtocolUtils.AddToProtocol("Die Grundrechenarten + - * / und Klammersetzung werden unterstüzt.", ProtocolMessageType.Info);
+            ProtocolUtils.AddToProtocol("Bei Eingabe einer Zahl wird diese in alle unterstützten Zahlensysteme umgewandelt.", ProtocolMessageType.Info);
+            ProtocolUtils.AddToProtocol("Der Taschenrechner unterstützt folgende Zahlensysteme, um diese zu verwenden verwenden sie folgende Präfixe:", ProtocolMessageType.Info);
+            ProtocolUtils.AddToProtocol("binär: b_(zahl),", ProtocolMessageType.Info);
+            ProtocolUtils.AddToProtocol("oktal: o_(zahl),", ProtocolMessageType.Info);
+            ProtocolUtils.AddToProtocol("dezimal: d_(zahl),", ProtocolMessageType.Info);
+            ProtocolUtils.AddToProtocol("hexadezimal: h_(zahl)", ProtocolMessageType.Info);
             do
             {
                 ConsoleUtils.BeginWindow();
@@ -31,21 +40,13 @@ namespace ZahlensystemeRechner
                 {
                     // Zerlege die Benutzereingabe in Tokens
                     InputToken[] tokens = InputUtils.CreateTokensFromInput(input);
-                    // wenn die länge 1 entspricht gehen wir davon aus, dass der benutzer eine zahl eingegeben hat
-                    // und versuchen diese zu konvertieren
-                    if (tokens.Length == 1)
-                    {
-                        Operand toConvert = InputUtils.CreateOperandFromInputToken(tokens[0]);
-                        ConversionUtils.ConvertNumber(toConvert);
-                    }
-                    else
-                    {
-                        //an sonsten sollte dies ein term sein(länge 0 ist kein problem)
-                        //versuche den Term zu evaluieren
-                        Operand result = CalculationUtils.CalculateTerm(tokens);
-                        //gib das Ergebnis aus
-                        ProtocolUtils.AddToProtocol("= " + result.DecimalValue.ToString(), ProtocolMessageType.Result);
-                    }
+
+                    //an sonsten sollte dies ein term sein(länge 0 ist kein problem)
+                    //versuche den Term zu evaluieren
+                    Operand result = CalculationUtils.CalculateTerm(tokens);
+                    //gib das Ergebnis aus
+                    ConversionUtils.ConvertNumber(result);
+
 
                 }
                 //fange ungültige Operationen auf, diese entstehen wenn Leere stacks gepoppt werden
@@ -67,7 +68,7 @@ namespace ZahlensystemeRechner
 
 
 
-                ProtocolUtils.AddToProtocol("Erneut rechnen? (j/n)",ProtocolMessageType.Info);
+                ProtocolUtils.AddToProtocol("Möchten Sie noch eine Berechnung durchführen? (j/n)", ProtocolMessageType.Info);
 
                 ConsoleUtils.BeginWindow();
                 ProtocolUtils.RefreshWindowFromProtocol();
